@@ -1,0 +1,123 @@
+//Helen Pabst
+import java.util.Scanner;
+public class coins 
+{
+	public static void main (String[] args)
+	{
+		//scanner for user input
+		Scanner input = new Scanner(System.in);
+		
+		//prog controls the while loop for the menu
+		boolean prog = true;
+		
+		
+		while(prog)
+		{
+			//start with prompts for user
+			System.out.println("\nPlease choose an option: ");
+			System.out.println("1. Input n and k to get all k-subsets of set {1, 2, ...n}");
+			System.out.println("2. Input n, k, a, and i to get the ith k-subset of {a, a+1,..., a+n-1}");
+			System.out.println("3. Input a coin denomination set S to get mu(S)");
+			System.out.println("4. Input n to get a coin denomination set S that has greatest efficiency");
+			System.out.println("5. Input n to get a coin denomination set S that has greatest efficiency and the greedy change-making procedure under S is correct");
+			System.out.println("6. Quit.");
+			
+			//get user input
+			int userInput = input.nextInt();
+			
+			//user has chosen to input n and k to get all k-subsets of set {1, 2, ... n}
+			//a = 1 in this example
+			if(userInput == 1)
+			{
+				System.out.println("Please input n:");
+				int n = input.nextInt();
+				System.out.println("Please input k:");
+				int k = input.nextInt();
+				
+				//a is the base of the array
+				int a = 1;
+				
+				//beginning element of array
+				int j = 0;
+				int[] array = new int[n];
+				
+				//generate array or "set"
+				while (a<=n)
+				{
+					array[j] = a;
+					a++;
+					j++;
+				}
+				
+				//print the set
+				j=0;
+				System.out.print("{");
+				while(j<(n-1))
+				{
+					System.out.print(array[j]+",");
+					j++;
+				}
+				System.out.print(n+"}");
+				
+				//space between set and subsets
+				System.out.print("\n");
+				
+				//figure out first subset
+				int [] firstSub = new int[k]; //length of each subset will be k
+				for(int i = 0; i<k; i++)
+				{
+					firstSub[i] = array[i];
+				}
+				
+				j=0;
+				System.out.print("{");
+				while(j<k-1)
+				{
+					System.out.print(firstSub[j]+",");
+					j++;
+				}
+				System.out.print(firstSub[k-1]+"}");
+				
+				//figure out subsequent subsets
+				Boolean exists = true;
+				exists = next_combination(firstSub, k, n);
+				
+			}
+			
+			//quit
+			if(userInput == 6)
+			{
+				prog = false;
+			}
+		}
+	}
+	public static Boolean next_combination(int[] array, int k, int maxS)
+	{
+		int value;
+		for(int j=k-1; j>=0; j--)
+		{
+			if(array[j]+(k-j)<=maxS)
+			{
+				value = array[j]+1;
+				for(int r=j; r<k; r++)
+				{
+					array[r]=value;
+					value++;
+				}
+			}
+		}
+		//print subset
+		int j=0;
+		System.out.print("{");
+		while(j<k-1)
+		{
+			System.out.print(array[j]+",");
+			j++;
+		}
+		System.out.print(array[k-1]+"}");	
+		
+		next_combination(array,k,maxS);
+		
+		return false;
+	}
+}
